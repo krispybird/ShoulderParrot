@@ -13,14 +13,15 @@ import android.util.Log;
 
 public class ParrotLocationManager {
     protected static Location current;
+    LocationManager locationManager;
 
     public ParrotLocationManager(Context main) {
         if (ContextCompat.checkSelfPermission(main, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+                == PackageManager.PERMISSION_GRANTED
+                && locationManager == null) {
             Log.d("LOCATION UPDATE: ", "Initializing location listening");
 
-            LocationManager locationManager =
-                    (LocationManager) main.getSystemService(Context.LOCATION_SERVICE);
+            locationManager = (LocationManager) main.getSystemService(Context.LOCATION_SERVICE);
             LocationListener locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
