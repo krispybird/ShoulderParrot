@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.peachcobbler.roboparrot.location.ParrotLocationManager;
 import com.example.peachcobbler.roboparrot.parsing.Parser;
 
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private Parser p;   //TODO temporary
+    private ParrotLocationManager lm;
 
     private final Map<String, Integer> PERMISSIONS =
             Collections.unmodifiableMap(new HashMap<String, Integer>() {
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void beginFunctioning(View v) {
+        lm = new ParrotLocationManager(this);
         p = new Parser(this);
     }
 

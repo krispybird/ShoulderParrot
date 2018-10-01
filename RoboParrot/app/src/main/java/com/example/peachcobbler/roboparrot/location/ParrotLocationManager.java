@@ -8,12 +8,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 public class ParrotLocationManager {
-    protected static Location current;
-    LocationManager locationManager;
+    public static Location current;
+    private static LocationManager locationManager;
 
     public ParrotLocationManager(Context main) {
         if (ContextCompat.checkSelfPermission(main, Manifest.permission.ACCESS_FINE_LOCATION)
