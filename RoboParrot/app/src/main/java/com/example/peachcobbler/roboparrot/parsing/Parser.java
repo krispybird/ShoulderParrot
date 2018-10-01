@@ -18,15 +18,17 @@ public class Parser {
                 return;
             }
         });
-        Location uni = new Location("");
+
+        /*Location uni = new Location("");
         uni.setLatitude(51.079102);
         uni.setLongitude(-114.135778);
+
         try {
             director.startNavigation(uni);
         }
         catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     static void fetchCommand(String indObject, String dirObject) {

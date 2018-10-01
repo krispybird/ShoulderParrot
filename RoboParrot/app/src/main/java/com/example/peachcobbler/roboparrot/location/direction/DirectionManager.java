@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Log;
 
 import com.example.peachcobbler.roboparrot.location.ParrotLocationManager;
 import com.mapbox.directions.DirectionsCriteria;
@@ -25,9 +26,8 @@ public class DirectionManager extends HandlerThread {
     }
 
     public void startNavigation(Location destination) throws Exception {
-        //Waypoint wayCurrent = new Waypoint(ParrotLocationManager.current.getLatitude(),
-        //                                  ParrotLocationManager.current.getLongitude());
-        Waypoint wayCurrent = new Waypoint(-114.152295, 51.077527);
+        Waypoint wayCurrent = new Waypoint(ParrotLocationManager.current.getLongitude(),
+                                          ParrotLocationManager.current.getLatitude());
         Waypoint wayDestination = new Waypoint(destination.getLongitude(),
                                                 destination.getLatitude());
 
@@ -54,8 +54,8 @@ public class DirectionManager extends HandlerThread {
             public void handleMessage(Message msg) {
                 MapboxDirections c = (MapboxDirections) msg.obj;
                 try {
-                    Response ret = c.execute();
-                    System.out.println(ret.toString());
+                    Log.d("DIRECTION UPDATE: ", "Directions ready");
+                    //TODO process directions list and send info to listener as appropriate
                 }
                 catch (IOException e) {
                     e.printStackTrace();

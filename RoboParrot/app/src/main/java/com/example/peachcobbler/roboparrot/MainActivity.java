@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
                remember to add permission to manifest.
              */
                     put(Manifest.permission.ACCESS_FINE_LOCATION, 100);
+                    put(Manifest.permission.BLUETOOTH, 105);
+                    put(Manifest.permission.BLUETOOTH_ADMIN, 106);
                 }
             });
 
