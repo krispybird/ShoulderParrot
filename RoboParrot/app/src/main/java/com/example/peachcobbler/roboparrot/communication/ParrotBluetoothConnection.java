@@ -54,7 +54,7 @@ public class ParrotBluetoothConnection extends ParrotConnection {
     }
 
     void send(ParrotMessage msg) {
-
+        
     }
 
     void close() {
