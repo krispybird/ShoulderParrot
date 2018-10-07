@@ -1,0 +1,62 @@
+
+Commands:
+
+p0,p1,p2,p3,p4 -- puts the arm at a pre-defined position
+
+cb+:
+Moves the base motor very slowly (in the positive direction) without regarding its position
+
+cb-:
+Moves the base motor very slowly (in the negative direction) without regarding its position
+
+
+cs+:
+Moves the shoulder motor very slowly (in the positive direction) without regarding its position
+
+cs-:
+Moves the shoulder motor very slowly (in the negative direction) without regarding its position
+
+
+ce+:
+Moves the elbow/neck motor very slowly (in the positive direction) without regarding its position
+
+ce-:
+Moves the elbow/neck motor very slowly (in the negative direction) without regarding its position
+
+s:
+stops all motor movement.
+
+mb[0-1023]:
+moves the base motor to a position between 0 and 1023. 0 would face the robot towards your back, 1023 towards your front.
+
+
+ms[0-1023]:
+moves the shoulder motor to a position between 0 and 1023. 0 is as low as possible, 1023 is as high as possible
+
+
+me[0-1023]:
+moves the elbow/neck motor to a position between 0 and 1023. 0 is ???, 1023 is ???
+
+xxx:
+recalibrates the motors to the pots, only use this if needed
+
+d:
+Disengage motor -- this is a toggle, send it again to re-enable the motors. 
+
+r: 
+reads the values of the potentiometers. They'll be from 0-1023, returned as 
+[base], [shoulder], [elbow/neck]\n
+
+If you position the robot in a given way, then use the 'r' command, you can feed the values back with the mb, ms and me commands to have the robot assume the position you recorded. For example, if I want to record a position, I'll turn the robot on, then 
+ - immediately give it the 'd' command.
+ - position it in a funny pose (I might use the cb,cs, ce and s commands to help move the motors if they're hard for me to move with my hands)
+ - send an r command to read the values of the pots (in this example the command returns "1021, 1023, 23" )
+ - send a d to re-engage the motors.
+ - now I can send "mb1021", "ms1023" and "me23" and the robot will move into the correct position
+
+
+gc: 
+close the gripper
+
+go: 
+open the gripper
