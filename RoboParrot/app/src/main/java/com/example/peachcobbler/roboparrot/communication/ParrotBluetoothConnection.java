@@ -53,6 +53,10 @@ public class ParrotBluetoothConnection extends ParrotConnection {
         }
     }
 
+    void send(ParrotMessage msg) {
+
+    }
+
     void close() {
         main.unregisterReceiver(mReceiver);
     }

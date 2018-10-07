@@ -10,7 +10,7 @@ public class POITimer extends Thread {
     private long last;
     private Handler bin;
 
-    public POITimer(long inter, Handler b) {
+    POITimer(long inter, Handler b) {
         interval = inter; bin = b;
         last = System.currentTimeMillis();
     }

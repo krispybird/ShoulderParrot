@@ -17,5 +17,7 @@ abstract class ParrotConnection {
 
     abstract void setup();
 
+    abstract void send(ParrotMessage msg);
+
     abstract void close();
 }
