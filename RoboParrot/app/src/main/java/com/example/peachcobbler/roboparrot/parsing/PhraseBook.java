@@ -8,13 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PhraseBook {
-    private static Set<String> KEYS = Collections.unmodifiableSet(new HashSet<String>() {
-        {
-            add("hey parrot");  /* TODO I don't know how the speech processor will handle "pokette"
-                                   TODO yet, so "parrot" is just a placeholder. */
-            add("arr matey");
-        }
-    });
 
     private static Set<String> OBJECTS = Collections.unmodifiableSet(new HashSet<String>() {
         {
