@@ -1,5 +1,7 @@
 cmudict-en-us.dict
+conversation.gram
 digits.gram
+directions.gram
 en-phone.dmp
 en-us-ptm/README
 en-us-ptm/feat.params
@@ -9,5 +11,6 @@ en-us-ptm/noisedict
 en-us-ptm/sendump
 en-us-ptm/transition_matrices
 en-us-ptm/variances
+manipulation.gram
 menu.gram
 weather.dmp

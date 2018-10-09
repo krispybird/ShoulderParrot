@@ -1,9 +1,11 @@
 package com.example.peachcobbler.roboparrot;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private Parser p;   //TODO temporary
     private ParrotLocationManager lm;
     private Handler handler;
+
+    private final int TTS_RESPONSE = 99;
 
     private final Map<String, Integer> PERMISSIONS =
             Collections.unmodifiableMap(new HashMap<String, Integer>() {
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void handleMessage(Message msg) {
+        Log.d("MAIN HANDLER", "Handle message");
         switch (msg.what) {
             case ParrotSpeechRecognizer.MAKE_TOAST:
                 Toast.makeText(getApplicationContext(), (String) msg.obj, Toast.LENGTH_SHORT).show();
@@ -92,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void requestAllPermissions() {
+        Intent checkIntent = new Intent();
+        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkIntent, TTS_RESPONSE);
+
         for (Map.Entry<String, Integer> permission : PERMISSIONS.entrySet()) {
             if (ContextCompat.checkSelfPermission(this, permission.getKey())
                     != PackageManager.PERMISSION_GRANTED) {
@@ -110,6 +119,20 @@ public class MainActivity extends AppCompatActivity {
             else {
                 Log.d("PERMISSION: ",
                         String.format("Already have permission %s", permission.getKey()));
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(
+            int requestCode, int resultCode, Intent data) {
+        if (requestCode == TTS_RESPONSE) {
+            if (resultCode != TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                // missing data, install it
+                Intent installIntent = new Intent();
+                installIntent.setAction(
+                        TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                startActivity(installIntent);
             }
         }
     }
