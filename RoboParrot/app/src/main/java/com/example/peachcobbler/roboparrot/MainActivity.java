@@ -2,23 +2,31 @@ package com.example.peachcobbler.roboparrot;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.peachcobbler.roboparrot.location.ParrotLocationManager;
 import com.example.peachcobbler.roboparrot.parsing.Parser;
+import com.example.peachcobbler.roboparrot.sound.input.ParrotSpeechRecognizer;
 
+import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    private ParrotSpeechRecognizer psr;
     private Parser p;   //TODO temporary
     private ParrotLocationManager lm;
+    private Handler handler;
 
     private final Map<String, Integer> PERMISSIONS =
             Collections.unmodifiableMap(new HashMap<String, Integer>() {
@@ -36,17 +44,51 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+    static class MainHandler extends Handler {
+        private final WeakReference<MainActivity> mActivity;
+
+        MainHandler(MainActivity ma) {
+            mActivity = new WeakReference<>(ma);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainActivity main = mActivity.get();
+            if (main != null) {
+                main.handleMessage(msg);
+            }
+        }
+    }
+
+    public void handleMessage(Message msg) {
+        switch (msg.what) {
+            case ParrotSpeechRecognizer.MAKE_TOAST:
+                Toast.makeText(getApplicationContext(), (String) msg.obj, Toast.LENGTH_SHORT).show();
+                break;
+            case ParrotSpeechRecognizer.CHANGE_TEXT:
+                ParrotSpeechRecognizer.TextFieldChange theMsg = (ParrotSpeechRecognizer.TextFieldChange) msg.obj;
+                ((TextView) findViewById(theMsg.getFieldId())).setText(theMsg.getContents());
+                break;
+            default:
+                break;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestAllPermissions();
 
+        handler = new MainHandler(this);
+
         setContentView(R.layout.activity_main);
     }
 
     public void beginFunctioning(View v) {
-        lm = new ParrotLocationManager(this);
-        p = new Parser(this);
+        //lm = new ParrotLocationManager(this);
+        //p = new Parser(this);
+        psr = new ParrotSpeechRecognizer("ParrotSpeechRecognizer", this, handler);
+        psr.start();
     }
 
     public void requestAllPermissions() {
@@ -88,7 +130,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        p.cleanup();
+        if (p != null)
+            p.cleanup();
+        if (psr != null)
+            psr.close();
     }
 
     @Override
