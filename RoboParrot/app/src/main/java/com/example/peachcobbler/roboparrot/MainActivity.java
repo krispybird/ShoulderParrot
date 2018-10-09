@@ -1,7 +1,6 @@
 package com.example.peachcobbler.roboparrot;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,8 +12,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View;
 
-import com.example.peachcobbler.roboparrot.location.ParrotLocationListener;
+import com.example.peachcobbler.roboparrot.location.ParrotLocationManager;
+import com.example.peachcobbler.roboparrot.parsing.Parser;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     private SpeechRecognizer recognizer;
     private HashMap<String, Integer> captions;
 
+    private Parser p;   //TODO temporary
+    private ParrotLocationManager lm;
+
 
     private final Map<String, Integer> PERMISSIONS =
             Collections.unmodifiableMap(new HashMap<String, Integer>() {
@@ -62,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
                     put(Manifest.permission.ACCESS_FINE_LOCATION, 100);
                     put(Manifest.permission.WRITE_EXTERNAL_STORAGE, 101);
                     put(Manifest.permission.RECORD_AUDIO, 102);
+                    put(Manifest.permission.BLUETOOTH, 105);
+                    put(Manifest.permission.BLUETOOTH_ADMIN, 106);
                 }
             });
 
@@ -85,6 +91,11 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         // Recognizer initialization is a time-consuming and it involves IO,
         // so we execute it in async task
         new SpeechRecognitionSetupTask(this).execute();
+    }
+
+    public void beginFunctioning(View v) {
+        lm = new ParrotLocationManager(this);
+        p = new Parser(this);
     }
 
     public void requestAllPermissions() {

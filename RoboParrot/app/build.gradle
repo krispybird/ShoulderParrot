@@ -30,4 +30,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':pocketsphinx-android-5prealpha-release')
+    implementation('com.mapbox.mapboxsdk:mapbox-android-directions:1.0.0@aar') {
+        transitive = true
+    }
+    implementation files('libs/wiki-java.jar')
 }
