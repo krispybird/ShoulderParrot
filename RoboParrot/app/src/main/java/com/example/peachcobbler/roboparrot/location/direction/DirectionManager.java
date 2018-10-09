@@ -53,13 +53,8 @@ public class DirectionManager extends HandlerThread {
             @Override
             public void handleMessage(Message msg) {
                 MapboxDirections c = (MapboxDirections) msg.obj;
-                try {
-                    Log.d("DIRECTION UPDATE: ", "Directions ready");
-                    //TODO process directions list and send info to listener as appropriate
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Log.d("DIRECTION UPDATE: ", "Directions ready");
+                //TODO process directions list and send info to listener as appropriate
             }
         };
     }

@@ -20,4 +20,10 @@ abstract class ParrotConnection {
     abstract void send(ParrotMessage msg);
 
     abstract void close();
+
+    abstract void cleanup();
+
+    abstract void pause();
+
+    abstract void resume();
 }

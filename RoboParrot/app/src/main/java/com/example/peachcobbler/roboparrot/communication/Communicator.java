@@ -26,16 +26,35 @@ public class Communicator extends HandlerThread {
         handler = new Handler(getLooper()) {
             @Override
             public void handleMessage(Message msg) {
-
+                //TODO ensure bluetooth connection is ready
+                if (msg.obj instanceof  String) {
+                    connection.send(new ParrotMessage((String) msg.obj));
+                }
             }
         };
 
         try {
             connection = new ParrotBluetoothConnection(main, handler);
-            poif = new POIFinder("POIFinder");
+            Log.d("BLUETOOTH: ", "Connection initiated!");
         }
         catch (IOException e) {
+            Log.d("BLUETOOTH: ", "Connection initialization failure...");
+            connection.close();
             e.printStackTrace();
         }
+        //poif = new POIFinder("POIFinder");
+        //poif.start();
+    }
+
+    public void cleanup() {
+        connection.cleanup();
+    }
+
+    public void pauseConnection() {
+        connection.pause();
+    }
+
+    public void resumeConnection() {
+        connection.resume();
     }
 }

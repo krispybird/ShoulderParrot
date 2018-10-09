@@ -82,4 +82,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        p.cleanup();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (p != null)
+            p.pauseConnection();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (p != null)
+            p.resumeConnection();
+    }
 }

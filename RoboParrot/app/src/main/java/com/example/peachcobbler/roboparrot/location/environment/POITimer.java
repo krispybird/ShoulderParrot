@@ -2,6 +2,7 @@ package com.example.peachcobbler.roboparrot.location.environment;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.example.peachcobbler.roboparrot.location.ParrotLocationManager;
 
@@ -24,6 +25,7 @@ public class POITimer extends Thread {
             }
             Message msg = new Message();
             msg.obj = ParrotLocationManager.current;
+            Log.d("TIME UPDATE: ", "Send new POI update");
             bin.sendMessage(msg);
             last = System.currentTimeMillis();
         }

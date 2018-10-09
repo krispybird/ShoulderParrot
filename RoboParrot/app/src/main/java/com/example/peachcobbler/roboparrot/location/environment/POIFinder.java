@@ -3,10 +3,13 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Log;
 
 import org.wikipedia.Wiki;
 
 import java.io.IOException;
+
+import javax.security.auth.login.LoginException;
 
 public class POIFinder extends HandlerThread {
     private final String USERNAME = "RobotParrotBot";
@@ -15,7 +18,7 @@ public class POIFinder extends HandlerThread {
     private final String ROBOT_PASSWORD = "24106njna0mv087eqf5i3f2do9q5n3rn";
     private final String USER_AGENT = "RoboParrotUIST/0.0";
 
-    private final long INTERVAL = 25000;
+    private final long INTERVAL = 5000;
     private final int RADIUS = 1000;
     private final int LIMIT = 10;
 
@@ -36,7 +39,7 @@ public class POIFinder extends HandlerThread {
                     try {
                         //TODO Set a default location
                         String response = (new GeoDataMessage((Location) msg.obj, RADIUS, LIMIT))
-                                .send(wiki, ROBOT_NAME);
+                                .send(wiki, USER_AGENT);
                         //TODO Send to parrot speech handler
                     }
                     catch (IOException e) {
@@ -46,6 +49,7 @@ public class POIFinder extends HandlerThread {
             }
         };
 
+        Log.d("WIKI UPDATE: ", "Posting login request to Wikipedia");
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -54,12 +58,12 @@ public class POIFinder extends HandlerThread {
                 try {
                     wiki.login(ROBOT_NAME, ROBOT_PASSWORD);
                 }
-                catch (IOException e) {
+                catch (LoginException | IOException e) {
                     e.printStackTrace();
                     System.exit(1);
                 }
                 wiki.setUserAgent(USER_AGENT);
-                wiki.setAssertionMode(Wiki.ASSERT_BOT);
+                wiki.setAssertionMode(Wiki.ASSERT_USER);
             }
         });
 
