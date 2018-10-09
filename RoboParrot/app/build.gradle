@@ -33,5 +33,9 @@ dependencies {
         transitive = true
     }
     implementation files('libs/wiki-java.jar')
-    implementation('org.threeten:threetenbp:1.3.7')
+    implementation files('libs/pocketsphinx-android-5prealpha-release.aar')
 }
+
+ant.importBuild 'assets.xml'
+preBuild.dependsOn(list, checksum)
+clean.dependsOn(clean_assets)

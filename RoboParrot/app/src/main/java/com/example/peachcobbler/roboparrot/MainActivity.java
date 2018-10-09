@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
                     put(Manifest.permission.ACCESS_FINE_LOCATION, 100);
                     put(Manifest.permission.BLUETOOTH, 105);
                     put(Manifest.permission.BLUETOOTH_ADMIN, 106);
+                    put(Manifest.permission.WRITE_EXTERNAL_STORAGE, 107);
+                    put(Manifest.permission.RECORD_AUDIO, 108);
                 }
             });
 
