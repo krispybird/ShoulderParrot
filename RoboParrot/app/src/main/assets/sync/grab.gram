@@ -1,0 +1,9 @@
+#JSGF V1.0;
+
+grammar grab;
+
+<grab> = water    |
+         test     |
+         wallet;
+
+public <grab> = <grab>+;
