@@ -11,6 +11,7 @@ import com.example.peachcobbler.roboparrot.location.direction.DirectionManager;
 public class Parser {
     private DirectionManager director;
     private Communicator comm;
+    private PhraseBook pb;
 
     public Parser(AppCompatActivity main) {
         director = new DirectionManager("dmthread");
@@ -23,6 +24,7 @@ public class Parser {
         });
         comm = new Communicator("Communicator", main);
         comm.start();
+        pb = new PhraseBook(main);
 
         /*Location uni = new Location("");
         uni.setLatitude(51.079102);
@@ -48,11 +50,27 @@ public class Parser {
         comm.resumeConnection();
     }
 
-    static void fetchCommand(String indObject, String dirObject) {
+    public int guessType(String command) {
+        String[] words = command.split(" ");
 
+        if (command.equals(PhraseBook.KEYPHRASE)) {
+            return PhraseBook.KEY;
+        }
+        // Direction start command
+        else if (command.contains("direction")) {
+            return PhraseBook.DIRECTION_START;
+        }
+        // Grab command
+        else if (words[0].equals("grab") || words[0].equals("pick") || words[0].equals("fetch")) {
+            return PhraseBook.MANIPULATION;
+        }
+        // Conversation command
+        else {
+            return PhraseBook.CONVERSATION;
+        }
     }
 
-    static void takeCommand(String indObject, String dirObject) {
+    static void fetchCommand(String dirObject) {
 
     }
 }

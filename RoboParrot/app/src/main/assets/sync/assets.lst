@@ -1,5 +1,9 @@
 cmudict-en-us.dict
 digits.gram
+<<<<<<< HEAD
+=======
+direction.gram
+>>>>>>> sound
 en-phone.dmp
 en-us-ptm/README
 en-us-ptm/feat.params

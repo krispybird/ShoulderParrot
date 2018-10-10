@@ -25,7 +25,7 @@ public class POITimer extends Thread {
             }
             Message msg = new Message();
             msg.obj = ParrotLocationManager.current;
-            Log.d("TIME UPDATE: ", "Send new POI update");
+            Log.d("TIME UPDATE: ", "Send new wiki update");
             bin.sendMessage(msg);
             last = System.currentTimeMillis();
         }

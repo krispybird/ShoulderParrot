@@ -6,14 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/caption_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:typeface="sans"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="1dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="150dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/caption_text">
+
+        <TextView
+            android:id="@+id/result_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/button"
         android:layout_width="162dp"
         android:layout_height="150dp"
-        android:layout_marginBottom="181dp"
-        android:layout_marginEnd="111dp"
         android:layout_marginStart="111dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginEnd="111dp"
+        android:layout_marginBottom="181dp"
         android:elevation="8dp"
         android:onClick="beginFunctioning"
         android:text="PLACEHOLDER"

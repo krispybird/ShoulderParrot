@@ -3,13 +3,10 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
-import org.wikipedia.Wiki;
-
-import java.io.IOException;
-
-import javax.security.auth.login.LoginException;
+import com.example.peachcobbler.roboparrot.parsing.PhraseBook;
 
 public class POIFinder extends HandlerThread {
     private final String USERNAME = "RobotParrotBot";
@@ -18,12 +15,12 @@ public class POIFinder extends HandlerThread {
     private final String ROBOT_PASSWORD = "24106njna0mv087eqf5i3f2do9q5n3rn";
     private final String USER_AGENT = "RoboParrotUIST/0.0";
 
-    private final long INTERVAL = 5000;
+    private final long INTERVAL = 60000;
     private final int RADIUS = 1000;
     private final int LIMIT = 10;
 
     private Handler handler;
-    private Wiki wiki;
+    private WikiRequest wiki;
     private POITimer timer;
 
     public POIFinder(String name) {
@@ -36,36 +33,17 @@ public class POIFinder extends HandlerThread {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.obj instanceof Location) {
-                    try {
-                        //TODO Set a default location
-                        String response = (new GeoDataMessage((Location) msg.obj, RADIUS, LIMIT))
-                                .send(wiki, USER_AGENT);
-                        //TODO Send to parrot speech handler
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    //TODO Set a default location
+                    String response = (new GeoDataMessage((Location) msg.obj, RADIUS, LIMIT))
+                            .send(wiki);
+                    Log.d("POI DESCRIPTION: ", response.toString());
+                    PhraseBook.respond(PhraseBook.FUN_FACT, response);
+                    //PhraseBook.mTts.speak(response, TextToSpeech.QUEUE_ADD, null, String.valueOf(Math.random()));
                 }
             }
         };
 
-        Log.d("WIKI UPDATE: ", "Posting login request to Wikipedia");
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                wiki = Wiki.createInstance("en.wikipedia.org");
-                wiki.setThrottle(5000);
-                try {
-                    wiki.login(ROBOT_NAME, ROBOT_PASSWORD);
-                }
-                catch (LoginException | IOException e) {
-                    e.printStackTrace();
-                    System.exit(1);
-                }
-                wiki.setUserAgent(USER_AGENT);
-                wiki.setAssertionMode(Wiki.ASSERT_USER);
-            }
-        });
+        wiki = new WikiRequest();
 
         timer = new POITimer(INTERVAL, handler);
         timer.start();

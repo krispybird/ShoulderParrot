@@ -33,7 +33,7 @@ public class Communicator extends HandlerThread {
             }
         };
 
-        try {
+        /*try {
             connection = new ParrotBluetoothConnection(main, handler);
             Log.d("BLUETOOTH: ", "Connection initiated!");
         }
@@ -41,20 +41,27 @@ public class Communicator extends HandlerThread {
             Log.d("BLUETOOTH: ", "Connection initialization failure...");
             connection.close();
             e.printStackTrace();
-        }
-        //poif = new POIFinder("POIFinder");
-        //poif.start();
+        }*/
+        poif = new POIFinder("POIFinder");
+        poif.start();
+    }
+
+    public ParrotConnection getConnection() {
+        return connection;
     }
 
     public void cleanup() {
-        connection.cleanup();
+        if (connection != null)
+            connection.cleanup();
     }
 
     public void pauseConnection() {
-        connection.pause();
+        if (connection != null)
+            connection.pause();
     }
 
     public void resumeConnection() {
-        connection.resume();
+        if (connection != null)
+            connection.resume();
     }
 }

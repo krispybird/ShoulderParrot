@@ -32,8 +32,8 @@ dependencies {
     implementation('com.mapbox.mapboxsdk:mapbox-android-directions:1.0.0@aar') {
         transitive = true
     }
-    implementation files('libs/wiki-java.jar')
     implementation project(':pocketsphinx-android-5prealpha-release')
+    implementation files('libs/pocketsphinx-android-5prealpha-release.aar')
 }
 
 ant.importBuild 'assets.xml'
