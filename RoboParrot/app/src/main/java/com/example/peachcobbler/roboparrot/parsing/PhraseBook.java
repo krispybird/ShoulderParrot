@@ -49,6 +49,13 @@ public class PhraseBook implements TextToSpeech.OnInitListener {
             add("Where are we going?");
         }
     });
+    private static  List<String> DIRECTION_GO = Collections.unmodifiableList(new ArrayList<String>() {
+        {
+            add("Ok, let's go!");
+            add("Fine, here we go.");
+            add("Let's get going.");
+        }
+    });
     private static List<String> CONVERSE = Collections.unmodifiableList(new ArrayList<String>() {
         {
             add("I don't want to talk right now.");
@@ -81,7 +88,14 @@ public class PhraseBook implements TextToSpeech.OnInitListener {
                 mTts.speak(response, TextToSpeech.QUEUE_FLUSH, null, String.valueOf(Math.random()));
                 break;
             case DIRECTION_START:
+                index = random.nextInt(DIRECTION_QUERY.size());
+                response = DIRECTION_QUERY.get(index);
+                mTts.speak(response, TextToSpeech.QUEUE_FLUSH, null, String.valueOf(Math.random()));
                 break;
+            case DIRECTION:
+                index = random.nextInt(DIRECTION_GO.size());
+                response = DIRECTION_GO.get(index);
+                mTts.speak(response, TextToSpeech.QUEUE_FLUSH, null, String.valueOf(Math.random()));
             case MANIPULATION:
                 break;
             case CONVERSATION:

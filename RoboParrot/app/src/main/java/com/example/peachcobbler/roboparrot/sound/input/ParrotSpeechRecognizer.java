@@ -67,6 +67,7 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
         captions = new HashMap<>();
         captions.put(KWS_SEARCH, R.string.kws_caption);
         captions.put(MENU_SEARCH, R.string.menu_caption);
+        captions.put(DIRECTION_SEARCH, R.string.direction_caption);
 
         bin.sendMessage(constructMessage(CHANGE_TEXT, R.id.caption_text, "Loading recognizer..."));
     }
@@ -110,16 +111,18 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
         Log.d("PARTIAL RESULT: ", hypothesis.getHypstr());
 
         String text = hypothesis.getHypstr();
-        int code = parser.guessType(text);
+        int code = (recognizer.getSearchName().equals(DIRECTION_SEARCH)) ? PhraseBook.DIRECTION : parser.guessType(text);
         switch (code) {
             case (PhraseBook.KEY):
                 switchSearch(MENU_SEARCH);
                 break;
-            case (PhraseBook.DIRECTION_START):
+            case (PhraseBook.DIRECTION):
                 switchSearch(DIRECTION_SEARCH);
                 break;
-            default:
+            case (PhraseBook.MANIPULATION | PhraseBook.CONVERSATION):
                 switchSearch(MENU_SEARCH);
+                break;
+            default:
                 break;
         }
         bin.sendMessage(constructMessage(CHANGE_TEXT, R.id.result_text, text));
@@ -131,7 +134,11 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
         if (hypothesis != null) {
             String text = hypothesis.getHypstr();
             bin.sendMessage(constructMessage(MAKE_TOAST, 0, text));
-            PhraseBook.respond(parser.guessType(text), text);
+            int type = parser.guessType(text);
+            PhraseBook.respond(type, text);
+            if (type == PhraseBook.DIRECTION_START) {
+                switchSearch(DIRECTION_SEARCH);
+            }
         }
     }
 
