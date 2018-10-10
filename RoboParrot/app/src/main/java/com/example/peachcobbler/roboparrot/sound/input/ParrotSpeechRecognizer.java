@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.peachcobbler.roboparrot.R;
 import com.example.peachcobbler.roboparrot.parsing.Parser;
+import com.example.peachcobbler.roboparrot.parsing.PhraseBook;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,9 +37,7 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
     /* Named searches allow to quickly reconfigure the decoder */
     private static final String KWS_SEARCH = "wakeup";
     private static final String MENU_SEARCH = "menu";
-
-    /* Keyword we are looking for to activate menu */
-    private static final String KEYPHRASE = "oh polly";
+    private static final String DIRECTION_SEARCH = "direct";
 
     private SpeechRecognizer recognizer;
     private HashMap<String, Integer> captions;
@@ -111,10 +110,19 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
         Log.d("PARTIAL RESULT: ", hypothesis.getHypstr());
 
         String text = hypothesis.getHypstr();
-        if (text.equals(KEYPHRASE))
-            switchSearch(MENU_SEARCH);
-        else
-            bin.sendMessage(constructMessage(CHANGE_TEXT, R.id.result_text, text));
+        int code = parser.guessType(text);
+        switch (code) {
+            case (PhraseBook.KEY):
+                switchSearch(MENU_SEARCH);
+                break;
+            case (PhraseBook.DIRECTION_START):
+                switchSearch(DIRECTION_SEARCH);
+                break;
+            default:
+                switchSearch(MENU_SEARCH);
+                break;
+        }
+        bin.sendMessage(constructMessage(CHANGE_TEXT, R.id.result_text, text));
     }
 
     @Override
@@ -123,8 +131,7 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
         if (hypothesis != null) {
             String text = hypothesis.getHypstr();
             bin.sendMessage(constructMessage(MAKE_TOAST, 0, text));
-            if (!text.equals(KEYPHRASE))
-                parser.process(text);
+            PhraseBook.respond(parser.guessType(text), text);
         }
     }
 
@@ -169,11 +176,14 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
          */
 
         // Create keyword-activation search.
-        recognizer.addKeyphraseSearch(KWS_SEARCH, KEYPHRASE);
+        recognizer.addKeyphraseSearch(KWS_SEARCH, PhraseBook.KEYPHRASE);
 
         // Create grammar-based search for selection between demos
         File menuGrammar = new File(assetsDir, "menu.gram");
         recognizer.addGrammarSearch(MENU_SEARCH, menuGrammar);
+
+        File directionGrammar = new File(assetsDir, "direction.gram");
+        recognizer.addGrammarSearch(DIRECTION_SEARCH, directionGrammar);
 
         bin.sendMessage(constructMessage(CHANGE_TEXT, R.id.caption_text, "Recognizer loaded."));
     }
@@ -183,6 +193,9 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
             recognizer.cancel();
             recognizer.shutdown();
         }
+        parser.cleanup();
+        PhraseBook.mTts.stop();
+        PhraseBook.mTts.shutdown();
     }
 
     public class TextFieldChange {
@@ -200,5 +213,16 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
         public String getContents() {
             return contents;
         }
+    }
+
+    public void pauseConnection() {
+        if (parser != null)
+            parser.pauseConnection();
+        PhraseBook.mTts.stop();
+    }
+
+    public void resumeConnection() {
+        if (parser != null)
+            parser.resumeConnection();
     }
 }

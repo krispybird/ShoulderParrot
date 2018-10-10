@@ -4,10 +4,9 @@ grammar menu;
 
 public <phrase> = <direction phrase> | <manipulate phrase> | <converse phrase>;
 
-<direction phrase> = (go | take me) to* <location>;
-<location> = home;
+<direction phrase> = (give | get) [me | a] (direction | directions);
 
-<manipulate phrase> = (grab | pick up | fetch) <item>;
-<item> = item | water | beverage | pop | juice | bottle;
+<manipulate phrase> = (grab | pick up | fetch | get) [my | the] <item>;
+<item> = item | water | beverage | pop | juice | bottle | cup | can;
 
 <converse phrase> = how are you | how's it (going | hanging) | what's up;

@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">RoboParrot</string>
-    <string name="kws_caption">Get bird to listen by saying, \"oh polly\".</string>
+    <string name="kws_caption">Get bird to listen by saying, \"hey polly\".</string>
     <string name="menu_caption">I\'m listening...</string>
 </resources>

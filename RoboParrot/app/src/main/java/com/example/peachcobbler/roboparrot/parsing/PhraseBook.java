@@ -14,40 +14,87 @@ import java.util.Random;
 import java.util.Set;
 
 public class PhraseBook implements TextToSpeech.OnInitListener {
-    public static final int DIRECTION = 65;
+    public static final int KEY = 61;
+    public static final int DIRECTION_START = 65;
+    public static final int DIRECTION = 66;
     public static final int MANIPULATION = 67;
     public static final int CONVERSATION = 71;
+    public static final int FUN_FACT = 77;
 
-    TextToSpeech mTts;
+    public static TextToSpeech mTts;
 
-    private Random random;
-    private final String READY = "What do you want?";
+    public static final String KEYPHRASE = "hey polly";
 
+    private static List<String> READY = Collections.unmodifiableList(new ArrayList<String>() {
+        {
+            add("Hello, I am Polly.");
+            add("What's up? I'm Polly.");
+            add("Howdy y'all, I'm Polly.");
+        }
+    });
+    private static List<String> LISTEN = Collections.unmodifiableList(new ArrayList<String>() {
+        {
+            add("What is it?");
+            add("Yes?");
+            add("What?");
+            add("What do you want?");
+            add("What now?");
+        }
+    });
+    private static  List<String> DIRECTION_QUERY = Collections.unmodifiableList(new ArrayList<String>() {
+        {
+            add("Where to?");
+            add("Where would you like to go?");
+            add("Ok, where?");
+            add("Where are we going?");
+        }
+    });
     private static List<String> CONVERSE = Collections.unmodifiableList(new ArrayList<String>() {
         {
             add("I don't want to talk right now.");
-            add("Sorry, I don't like you.");
-            add("Excuse me, could you please stop talking.");
-            add("Stop.");
             add("No, go away.");
+            add("Fine.");
+        }
+    });
+    private static List<String> FACT_INTRO = Collections.unmodifiableList(new ArrayList<String>() {
+        {
+            add("Here's a good one...");
+            add("Guess what?");
+            add("Here's what's hip and happenin' near you.");
+            add("You might want to check this place out if you have time...");
+            add("Ooo! Let's go here!");
         }
     });
 
     PhraseBook(AppCompatActivity main) {
         mTts = new TextToSpeech(main, this);
-        random = new Random(System.currentTimeMillis());
     }
 
-    void respond(int type, String query) {
+    public static void respond(int type, String query) {
+        Random random = new Random(System.currentTimeMillis());
+        int index;
+        String response;
         switch (type) {
-            case DIRECTION:
+            case KEY:
+                index = random.nextInt(LISTEN.size());
+                response = LISTEN.get(index);
+                mTts.speak(response, TextToSpeech.QUEUE_FLUSH, null, String.valueOf(Math.random()));
+                break;
+            case DIRECTION_START:
                 break;
             case MANIPULATION:
                 break;
             case CONVERSATION:
-                int index = random.nextInt(CONVERSE.size());
-                String response = CONVERSE.get(index);
+                index = random.nextInt(CONVERSE.size());
+                response = CONVERSE.get(index);
                 mTts.speak(response, TextToSpeech.QUEUE_ADD, null, String.valueOf(Math.random()));
+                break;
+            case FUN_FACT:
+                if (!mTts.isSpeaking()) {
+                    index = random.nextInt(FACT_INTRO.size());
+                    response = FACT_INTRO.get(index);
+                    mTts.speak(response + query, TextToSpeech.QUEUE_ADD, null, String.valueOf(Math.random()));
+                }
                 break;
             default:
                 break;
@@ -56,7 +103,9 @@ public class PhraseBook implements TextToSpeech.OnInitListener {
 
     @Override
     public void onInit(int i) {
+        Random random = new Random(System.currentTimeMillis());
         mTts.setLanguage(Locale.CANADA);
-        mTts.speak(READY, TextToSpeech.QUEUE_ADD, null, String.valueOf(Math.random()));
+        int index = random.nextInt(READY.size());
+        mTts.speak(READY.get(index), TextToSpeech.QUEUE_ADD, null, String.valueOf(Math.random()));
     }
 }

@@ -50,20 +50,23 @@ public class Parser {
         comm.resumeConnection();
     }
 
-    public void process(String command) {
+    public int guessType(String command) {
         String[] words = command.split(" ");
 
-        // Directions command
-        if (words[0].equals("go") || words[0].equals("take")) {
-
+        if (command.equals(PhraseBook.KEYPHRASE)) {
+            return PhraseBook.KEY;
+        }
+        // Direction start command
+        else if (command.contains("direction")) {
+            return PhraseBook.DIRECTION_START;
         }
         // Grab command
         else if (words[0].equals("grab") || words[0].equals("pick") || words[0].equals("fetch")) {
-
+            return PhraseBook.MANIPULATION;
         }
         // Conversation command
         else {
-            pb.respond(PhraseBook.CONVERSATION, command);
+            return PhraseBook.CONVERSATION;
         }
     }
 

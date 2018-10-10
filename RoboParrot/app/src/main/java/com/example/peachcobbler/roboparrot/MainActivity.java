@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void beginFunctioning(View v) {
-        //lm = new ParrotLocationManager(this);
+        lm = new ParrotLocationManager(this);
         //p = new Parser(this);
         psr = new ParrotSpeechRecognizer("ParrotSpeechRecognizer", this, handler);
         psr.start();
@@ -153,8 +153,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (p != null)
-            p.cleanup();
         if (psr != null)
             psr.close();
     }
@@ -162,14 +160,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        if (p != null)
-            p.pauseConnection();
+        if (psr != null)
+            psr.pauseConnection();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (p != null)
-            p.resumeConnection();
+        if (psr != null)
+            psr.resumeConnection();
     }
 }
