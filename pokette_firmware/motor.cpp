@@ -114,7 +114,7 @@ unsigned long gripper_time = -1;
 bool gripper_closing = true;
 
 void moveGripper() {
-  if(gripper_time != -1 && millis() - gripper_time < 3000) {
+  if(gripper_time != -1 && millis() - gripper_time < 1800 ) {
     motor4.run((gripper_closing ?-1:1)*255);
     
   } else {

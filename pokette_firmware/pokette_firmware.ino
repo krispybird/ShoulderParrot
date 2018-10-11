@@ -38,7 +38,7 @@ void setup()
 
 
 bool     deadMan     = false;
-uint32_t basePos     = 1023;
+uint32_t basePos     = 950;
 uint32_t shoulderPos = 400;
 uint32_t neckPos     = 180;
 
