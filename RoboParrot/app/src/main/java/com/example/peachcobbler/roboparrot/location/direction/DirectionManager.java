@@ -11,6 +11,9 @@ import com.mapbox.directions.DirectionsCriteria;
 import com.mapbox.directions.MapboxDirections;
 import com.mapbox.directions.service.models.Waypoint;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import retrofit.Response;
@@ -54,7 +57,12 @@ public class DirectionManager extends HandlerThread {
             public void handleMessage(Message msg) {
                 MapboxDirections c = (MapboxDirections) msg.obj;
                 Log.d("DIRECTION UPDATE: ", "Directions ready");
-                //TODO process directions list and send info to listener as appropriate
+                try {
+                    JSONObject contents = new JSONObject(c.execute().body().toString());
+                }
+                catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
             }
         };
     }

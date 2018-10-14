@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.peachcobbler.roboparrot.R;
+import com.example.peachcobbler.roboparrot.movement.Movement;
 import com.example.peachcobbler.roboparrot.parsing.Parser;
 import com.example.peachcobbler.roboparrot.parsing.PhraseBook;
 
@@ -138,6 +139,9 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
             PhraseBook.respond(type, text);
             if (type == PhraseBook.DIRECTION_START) {
                 switchSearch(DIRECTION_SEARCH);
+            }
+            else if (type == PhraseBook.MANIPULATION) {
+                parser.fetchCommand(text);
             }
         }
     }

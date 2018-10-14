@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.peachcobbler.roboparrot.location.environment.POIFinder;
+import com.example.peachcobbler.roboparrot.movement.Movement;
 
 import java.io.IOException;
 
@@ -27,27 +28,28 @@ public class Communicator extends HandlerThread {
             @Override
             public void handleMessage(Message msg) {
                 //TODO ensure bluetooth connection is ready
-                if (msg.obj instanceof  String) {
-                    connection.send(new ParrotMessage((String) msg.obj));
-                }
+                connection.send(new ParrotMessage((String) msg.obj));
             }
         };
 
-        /*try {
+        try {
             connection = new ParrotBluetoothConnection(main, handler);
             Log.d("BLUETOOTH: ", "Connection initiated!");
+            //Movement.execute(Movement.CALIBRATE, this);
         }
         catch (IOException e) {
             Log.d("BLUETOOTH: ", "Connection initialization failure...");
             connection.close();
             e.printStackTrace();
-        }*/
+        }
         poif = new POIFinder("POIFinder");
         poif.start();
     }
 
-    public ParrotConnection getConnection() {
-        return connection;
+    public void sendMessage(String message) {
+        Message msg = new Message();
+        msg.obj = message;
+        handler.sendMessage(msg);
     }
 
     public void cleanup() {

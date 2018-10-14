@@ -66,6 +66,8 @@ public class ParrotBluetoothConnection extends ParrotConnection {
             throw new IOException("Bluetooth not supported.");
         }
 
+        setup();
+
         Set<BluetoothDevice> paired = mBluetoothAdapter.getBondedDevices();
         Log.d("BLUETOOTH: ", String.format("Paired length: %d", paired.size()));
         if (paired.size() > 0) {
