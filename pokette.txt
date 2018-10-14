@@ -59,4 +59,24 @@ gc:
 close the gripper
 
 go: 
-open the gripper
+open the grippe
+
+
+
+The commands I'd send to the robot for picking up the can are
+
+p4
+go
+mb5
+wait a few seconds for the robot to turn, or use the r function to wait until the base is 5...
+p0
+gc
+wait 2 seconds at least
+p4
+mb950
+wait a few seconds
+p1
+wait a few seconds 
+go
+p3
+
