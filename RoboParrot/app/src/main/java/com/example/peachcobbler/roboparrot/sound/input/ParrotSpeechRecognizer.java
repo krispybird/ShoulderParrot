@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.peachcobbler.roboparrot.R;
+import com.example.peachcobbler.roboparrot.location.direction.DirectionManager;
 import com.example.peachcobbler.roboparrot.movement.Movement;
 import com.example.peachcobbler.roboparrot.parsing.Parser;
 import com.example.peachcobbler.roboparrot.parsing.PhraseBook;
@@ -137,11 +138,30 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
             bin.sendMessage(constructMessage(MAKE_TOAST, 0, text));
             int type = parser.guessType(text);
             PhraseBook.respond(type, text);
-            if (type == PhraseBook.DIRECTION_START) {
+            if (type == PhraseBook.NEXT) {
+                Message msg = new Message();
+                msg.what = DirectionManager.UPDATE;
+                parser.getDirectionManager().getHandler().sendMessage(msg);
+                switchSearch(KWS_SEARCH);
+            }
+            else if (recognizer.getSearchName().equals(DIRECTION_SEARCH)) {
+                try {
+                    parser.getDirectionManager().startNavigation(text);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+                switchSearch(KWS_SEARCH);
+            }
+            else if (type == PhraseBook.DIRECTION_START) {
                 switchSearch(DIRECTION_SEARCH);
             }
             else if (type == PhraseBook.MANIPULATION) {
                 parser.fetchCommand(text);
+                switchSearch(KWS_SEARCH);
+            }
+            else if (type == PhraseBook.CONVERSATION) {
+                switchSearch(KWS_SEARCH);
             }
         }
     }

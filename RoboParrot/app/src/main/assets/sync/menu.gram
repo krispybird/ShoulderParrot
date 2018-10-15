@@ -2,7 +2,7 @@
 
 grammar menu;
 
-public <phrase> = <direction phrase> | <manipulate phrase> | <converse phrase>;
+public <phrase> = <direction phrase> | <manipulate phrase> | <converse phrase> | <next>;
 
 <direction phrase> = (give | get) [me | a] (direction | directions);
 
@@ -10,3 +10,5 @@ public <phrase> = <direction phrase> | <manipulate phrase> | <converse phrase>;
 <item> = item | water | beverage | pop | juice | bottle | cup | can;
 
 <converse phrase> = how are you | how's it (going | hanging) | what's up;
+
+<next> = next [step | direction];

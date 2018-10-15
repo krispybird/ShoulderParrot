@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements LocationEntryFrag
         super.onCreate(savedInstanceState);
         requestAllPermissions();
 
+        Movement m = new Movement("move");
+        m.start();
         handler = new MainHandler(this);
 
         setContentView(R.layout.activity_main);
@@ -126,12 +128,7 @@ public class MainActivity extends AppCompatActivity implements LocationEntryFrag
         if (notStarted())
             return;
 
-        try {
-            Movement.execute(Movement.GRAB, psr.getParser().getCommunicator());
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Movement.execute(Movement.GRAB, psr.getParser().getCommunicator());
     }
 
     public void fact(View v) {

@@ -64,6 +64,9 @@ public class Parser {
         if (command.equals(PhraseBook.KEYPHRASE)) {
             return PhraseBook.KEY;
         }
+        else if (words[0].equals("next")) {
+            return PhraseBook.NEXT;
+        }
         // Direction start command
         else if (command.contains("direction")) {
             return PhraseBook.DIRECTION_START;
@@ -79,11 +82,6 @@ public class Parser {
     }
 
     public void fetchCommand(String dirObject) {
-        try {
-            Movement.execute(Movement.GRAB, comm);
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Movement.execute(Movement.GRAB, comm);
     }
 }

@@ -20,6 +20,7 @@ public class PhraseBook implements TextToSpeech.OnInitListener {
     public static final int MANIPULATION = 67;
     public static final int CONVERSATION = 71;
     public static final int FUN_FACT = 77;
+    public static final int NEXT = 79;
 
     public static TextToSpeech mTts;
 
