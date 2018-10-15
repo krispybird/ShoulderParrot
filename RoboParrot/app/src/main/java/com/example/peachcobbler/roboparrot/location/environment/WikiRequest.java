@@ -20,7 +20,6 @@ class WikiRequest {
 
     }
 
-
     String makeRequest(Map<String, String> params) {
         String response = "";
         try {

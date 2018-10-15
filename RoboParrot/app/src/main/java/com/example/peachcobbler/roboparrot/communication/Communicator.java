@@ -1,5 +1,8 @@
 package com.example.peachcobbler.roboparrot.communication;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
@@ -42,7 +45,7 @@ public class Communicator extends HandlerThread {
             connection.close();
             e.printStackTrace();
         }
-        poif = new POIFinder("POIFinder");
+        poif = new POIFinder(main, "POIFinder");
         poif.start();
     }
 
@@ -69,5 +72,12 @@ public class Communicator extends HandlerThread {
     public void resumeConnection() {
         if (connection != null)
             connection.resume();
+    }
+
+    public static boolean internetConnected(AppCompatActivity main) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) main.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

@@ -19,7 +19,7 @@ public class Parser {
     private PhraseBook pb;
 
     public Parser(AppCompatActivity main) {
-        director = new DirectionManager("dmthread");
+        director = new DirectionManager(main, "dmthread");
         director.start();
         director.setDirectionListener(new DirectionManager.DirectionListener() {
             @Override

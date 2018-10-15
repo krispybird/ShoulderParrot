@@ -21,6 +21,7 @@ public class PhraseBook implements TextToSpeech.OnInitListener {
     public static final int CONVERSATION = 71;
     public static final int FUN_FACT = 77;
     public static final int NEXT = 79;
+    public static final int NO_INTERNET = 81;
 
     public static TextToSpeech mTts;
 
@@ -40,6 +41,7 @@ public class PhraseBook implements TextToSpeech.OnInitListener {
             add("What?");
             add("What do you want?");
             add("What now?");
+            add("Huh?");
         }
     });
     private static  List<String> DIRECTION_QUERY = Collections.unmodifiableList(new ArrayList<String>() {
@@ -71,6 +73,16 @@ public class PhraseBook implements TextToSpeech.OnInitListener {
             add("Here's what's hip and happenin' near you.");
             add("You might want to check this place out if you have time...");
             add("Ooo! Let's go here!");
+            add("This looks like a cool place...");
+        }
+    });
+    private static List<String> INTENETLESS = Collections.unmodifiableList(new ArrayList<String>() {
+        {
+            add("I can't do that right now. I don't have an internet connection.");
+            add("I could help you if I was connected to the internet.");
+            add("Can't do it. No internet.");
+            add("That won't work without internet. Why don't we stay here and get to know each other better?");
+            add("How about you find me some WiFi first?");
         }
     });
 
@@ -109,6 +121,10 @@ public class PhraseBook implements TextToSpeech.OnInitListener {
                 response = FACT_INTRO.get(index);
                 mTts.speak(response + query, TextToSpeech.QUEUE_FLUSH, null, String.valueOf(Math.random()));
                 break;
+            case NO_INTERNET:
+                index = random.nextInt(INTENETLESS.size());
+                response = INTENETLESS.get(index);
+                mTts.speak(response, TextToSpeech.QUEUE_FLUSH, null, String.valueOf(Math.random()));
             default:
                 break;
         }

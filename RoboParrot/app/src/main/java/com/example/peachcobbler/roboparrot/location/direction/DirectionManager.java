@@ -5,9 +5,12 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.peachcobbler.roboparrot.communication.Communicator;
 import com.example.peachcobbler.roboparrot.location.ParrotLocationManager;
+import com.example.peachcobbler.roboparrot.parsing.PhraseBook;
 import com.mapbox.directions.DirectionsCriteria;
 import com.mapbox.directions.MapboxDirections;
 import com.mapbox.directions.service.models.DirectionsResponse;
@@ -29,12 +32,14 @@ public class DirectionManager extends HandlerThread {
 
     private Handler handler;
     private DirectionListener listener;
+    private AppCompatActivity main;
 
     private String[] currList = new String[0];
     private int currInd = 0;
 
-    public DirectionManager(String name) {
+    public DirectionManager(AppCompatActivity m, String name) {
         super(name);
+        main = m;
     }
 
     public void startNavigation(String destination) throws Exception {
@@ -51,12 +56,17 @@ public class DirectionManager extends HandlerThread {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case NEW:
-                        String destination = (String) msg.obj;
-                        currList = directionList(destination);
-                        currInd = 0;
-                        Message newMsg = new Message();
-                        newMsg.what = UPDATE;
-                        handler.sendMessage(newMsg);
+                        if (Communicator.internetConnected(main)) {
+                            String destination = (String) msg.obj;
+                            currList = directionList(destination);
+                            currInd = 0;
+                            Message newMsg = new Message();
+                            newMsg.what = UPDATE;
+                            handler.sendMessage(newMsg);
+                        }
+                        else {
+                            PhraseBook.respond(PhraseBook.NO_INTERNET, "");
+                        }
                         break;
                     case UPDATE:
                         if (currInd < currList.length) {

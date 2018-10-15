@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements LocationEntryFrag
                     put(Manifest.permission.BLUETOOTH_ADMIN, 106);
                     put(Manifest.permission.WRITE_EXTERNAL_STORAGE, 107);
                     put(Manifest.permission.RECORD_AUDIO, 108);
+                    put(Manifest.permission.ACCESS_NETWORK_STATE, 109);
                 }
             });
 
