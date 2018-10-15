@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.peachcobbler.roboparrot.location.ParrotLocationManager;
 
+// OBSOLETE - used to time POI messages
 public class POITimer extends Thread {
     private long interval;
     private long last;

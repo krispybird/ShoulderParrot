@@ -46,6 +46,10 @@ public class Communicator extends HandlerThread {
         poif.start();
     }
 
+    public POIFinder getPOIFinder() {
+        return poif;
+    }
+
     public void sendMessage(String message) {
         Message msg = new Message();
         msg.obj = message;

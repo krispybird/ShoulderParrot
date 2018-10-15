@@ -104,11 +104,9 @@ public class PhraseBook implements TextToSpeech.OnInitListener {
                 mTts.speak(response, TextToSpeech.QUEUE_ADD, null, String.valueOf(Math.random()));
                 break;
             case FUN_FACT:
-                if (!mTts.isSpeaking()) {
-                    index = random.nextInt(FACT_INTRO.size());
-                    response = FACT_INTRO.get(index);
-                    mTts.speak(response + query, TextToSpeech.QUEUE_ADD, null, String.valueOf(Math.random()));
-                }
+                index = random.nextInt(FACT_INTRO.size());
+                response = FACT_INTRO.get(index);
+                mTts.speak(response + query, TextToSpeech.QUEUE_FLUSH, null, String.valueOf(Math.random()));
                 break;
             default:
                 break;

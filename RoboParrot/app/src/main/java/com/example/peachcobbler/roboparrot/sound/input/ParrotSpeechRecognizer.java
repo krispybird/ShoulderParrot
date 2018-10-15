@@ -36,7 +36,7 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
     public static final int CHANGE_TEXT = 1002;
 
     /* Named searches allow to quickly reconfigure the decoder */
-    private static final String KWS_SEARCH = "wakeup";
+    public static final String KWS_SEARCH = "wakeup";
     private static final String MENU_SEARCH = "menu";
     private static final String DIRECTION_SEARCH = "direct";
 
@@ -197,6 +197,14 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
         recognizer.addGrammarSearch(DIRECTION_SEARCH, directionGrammar);
 
         bin.sendMessage(constructMessage(CHANGE_TEXT, R.id.caption_text, "Recognizer loaded."));
+    }
+
+    public SpeechRecognizer getRecognizer() {
+        return recognizer;
+    }
+
+    public Parser getParser() {
+        return parser;
     }
 
     public void close() {

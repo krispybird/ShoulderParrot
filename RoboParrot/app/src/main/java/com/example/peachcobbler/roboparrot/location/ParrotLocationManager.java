@@ -11,6 +11,13 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 public class ParrotLocationManager {
+
+    public static Location defaultLocation = new Location("") {
+        {
+            setLatitude(52.539293);
+            setLongitude(13.413553);
+        }
+    };
     public static Location current;
     private static LocationManager locationManager;
 

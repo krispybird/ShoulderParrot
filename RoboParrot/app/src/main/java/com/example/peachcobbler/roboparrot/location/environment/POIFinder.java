@@ -18,6 +18,7 @@ public class POIFinder extends HandlerThread {
     private final long INTERVAL = 60000;
     private final int RADIUS = 1000;
     private final int LIMIT = 10;
+    private final int MAX_SENTENCES = 2;
 
     private Handler handler;
     private WikiRequest wiki;
@@ -33,11 +34,15 @@ public class POIFinder extends HandlerThread {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.obj instanceof Location) {
-                    //TODO Set a default location
                     String response = (new GeoDataMessage((Location) msg.obj, RADIUS, LIMIT))
                             .send(wiki);
-                    Log.d("POI DESCRIPTION: ", response.toString());
-                    PhraseBook.respond(PhraseBook.FUN_FACT, response);
+                    String[] sentences = response.split("\\.");
+                    String say = "";
+                    for (int i = 0; i < sentences.length && i < MAX_SENTENCES; i++) {
+                        say += sentences[i] + ".";
+                    }
+                    Log.d("POI DESCRIPTION: ", response);
+                    PhraseBook.respond(PhraseBook.FUN_FACT, say);
                     //PhraseBook.mTts.speak(response, TextToSpeech.QUEUE_ADD, null, String.valueOf(Math.random()));
                 }
             }
@@ -45,7 +50,11 @@ public class POIFinder extends HandlerThread {
 
         wiki = new WikiRequest();
 
-        timer = new POITimer(INTERVAL, handler);
-        timer.start();
+        /*timer = new POITimer(INTERVAL, handler);
+        timer.start();*/
+    }
+
+    public Handler getHandler() {
+        return handler;
     }
 }

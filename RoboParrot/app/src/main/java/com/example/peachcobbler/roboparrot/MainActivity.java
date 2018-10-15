@@ -3,20 +3,27 @@ package com.example.peachcobbler.roboparrot;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.peachcobbler.roboparrot.location.ParrotLocationManager;
+import com.example.peachcobbler.roboparrot.location.direction.DirectionManager;
+import com.example.peachcobbler.roboparrot.movement.Movement;
 import com.example.peachcobbler.roboparrot.parsing.Parser;
+import com.example.peachcobbler.roboparrot.parsing.PhraseBook;
 import com.example.peachcobbler.roboparrot.sound.input.ParrotSpeechRecognizer;
 
 import java.lang.ref.WeakReference;
@@ -24,11 +31,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LocationEntryFragment.LocationEntryListener {
     private ParrotSpeechRecognizer psr;
     private Parser p;   //TODO temporary
     private ParrotLocationManager lm;
     private Handler handler;
+    private boolean started = false;
+    private boolean muted = false;
 
     private final int TTS_RESPONSE = 99;
 
@@ -94,6 +103,90 @@ public class MainActivity extends AppCompatActivity {
         //p = new Parser(this);
         psr = new ParrotSpeechRecognizer("ParrotSpeechRecognizer", this, handler);
         psr.start();
+        ((ViewGroup) v.getParent()).removeView(v);
+        started = true;
+    }
+
+    public void mute(View v) {
+        if (notStarted())
+            return;
+
+        muted = !muted;
+        if (muted) {
+            psr.getRecognizer().stop();
+            ((Button) findViewById(R.id.muteButton)).setText("Unmute");
+        }
+        else {
+            psr.getRecognizer().startListening(ParrotSpeechRecognizer.KWS_SEARCH);
+            ((Button) findViewById(R.id.muteButton)).setText("Mute");
+        }
+    }
+
+    public void move(View v) {
+        if (notStarted())
+            return;
+
+        try {
+            Movement.execute(Movement.GRAB, psr.getParser().getCommunicator());
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void fact(View v) {
+        if (notStarted())
+            return;
+
+        Message msg = new Message();
+        if (ParrotLocationManager.current == null) {
+            msg.obj = ParrotLocationManager.defaultLocation;
+        }
+        else {
+            msg.obj = ParrotLocationManager.current;
+        }
+        psr.getParser().getCommunicator().getPOIFinder().getHandler().sendMessage(msg);
+    }
+
+    public void direct(View v) {
+        if (notStarted())
+            return;
+
+        FragmentManager fm = getSupportFragmentManager();
+        LocationEntryFragment editNameDialogFragment = LocationEntryFragment.newInstance();
+        editNameDialogFragment.show(fm, "fragment_edit_name");
+    }
+
+    public void next(View v) {
+        Message msg = new Message();
+        msg.what = DirectionManager.UPDATE;
+        psr.getParser().getDirectionManager().getHandler().sendMessage(msg);
+    }
+
+    public void cancel(View v) {
+        psr.getParser().getDirectionManager().reset();
+        findViewById(R.id.nextButton).setVisibility(View.INVISIBLE);
+        findViewById(R.id.cancelButton).setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onFinishEditDialog(String inputText) {
+        try {
+            psr.getParser().getDirectionManager().startNavigation(inputText);
+            findViewById(R.id.cancelButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.nextButton).setVisibility(View.VISIBLE);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean notStarted() {
+        if (!started) {
+            Toast.makeText(this, "Please press start button first.", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
     }
 
     public void requestAllPermissions() {
