@@ -34,6 +34,34 @@ public class DirectionManager extends HandlerThread {
     private DirectionListener listener;
     private AppCompatActivity main;
 
+    private final String[] HOME_LIST = new String[] {"Head south",
+                                                    "Turn left",
+                                                    "Turn right",
+                                                    "Turn left onto Sredzkistraße",
+                                                    "Turn right onto Prenzlauer Allee",
+                                                    "Make a U-turn and continue on Prenzlauer Allee",
+                                                    "Turn right onto Christburger Straße",
+                                                    "Turn right onto Greifswalder Straße",
+                                                    "Make a U-turn and continue on Greifswalder Straße",
+                                                    "Turn right onto Pasteurstraße",
+                                                    "Turn left onto Kniprodestraße",
+                                                    "Turn right",
+                                                    "Turn right",
+                                                    "Turn left",
+                                                    "Turn left",
+                                                    "Turn right",
+                                                    "Turn left",
+                                                    "Turn right onto Danziger Straße",
+                                                    "Continue onto Petersburger Straße",
+                                                    "Turn left to stay on Petersburger Straße",
+                                                    "Turn left",
+                                                    "Turn left onto Frankfurter Allee",
+                                                    "Turn right onto Kinzigstraße",
+                                                    "Turn left onto Scharnweberstraße",
+                                                    "Turn right onto Jungstraße",
+                                                    "Turn left onto Oderstraße",
+                                                    "You have arrived at your destination, on the right"};
+
     private String[] currList = new String[0];
     private int currInd = 0;
 
@@ -62,6 +90,15 @@ public class DirectionManager extends HandlerThread {
                             currInd = 0;
                             Message newMsg = new Message();
                             newMsg.what = UPDATE;
+                            PhraseBook.respond(PhraseBook.DIRECTION, (String) msg.obj);
+                            handler.sendMessage(newMsg);
+                        }
+                        else if (((String) msg.obj).equals("home")) {
+                            currList = HOME_LIST;
+                            currInd = 0;
+                            Message newMsg = new Message();
+                            newMsg.what = UPDATE;
+                            PhraseBook.respond(PhraseBook.DIRECTION, (String) msg.obj);
                             handler.sendMessage(newMsg);
                         }
                         else {

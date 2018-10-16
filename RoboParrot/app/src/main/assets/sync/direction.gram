@@ -4,7 +4,7 @@ grammar direction;
 
 import <digits.gram>;
 
-public <location> = [digits] ((<name> <thing>*) | digits) <street>* [<quadrant>];
+public <location> = ([digits] ((<name> <thing>*) | digits) <street>* [<quadrant>]) | home;
 <name> = tuscany | montgomery | royal | rocky | crescent | scenic [acres] | university;
 <thing> = close | ridge | view | gate | crescent | height | oak;
 <street> = street | road | avenue | ave | boulevard | trail | drive;

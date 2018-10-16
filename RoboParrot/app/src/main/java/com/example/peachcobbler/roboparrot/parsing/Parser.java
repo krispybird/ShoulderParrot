@@ -67,6 +67,9 @@ public class Parser {
         else if (words[0].equals("next")) {
             return PhraseBook.NEXT;
         }
+        else if (words[words.length - 1].equals("fact")) {
+            return PhraseBook.FUN_FACT;
+        }
         // Direction start command
         else if (command.contains("direction")) {
             return PhraseBook.DIRECTION_START;

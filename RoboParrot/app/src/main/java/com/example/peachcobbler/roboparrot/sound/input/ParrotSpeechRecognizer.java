@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.peachcobbler.roboparrot.R;
+import com.example.peachcobbler.roboparrot.location.ParrotLocationManager;
 import com.example.peachcobbler.roboparrot.location.direction.DirectionManager;
 import com.example.peachcobbler.roboparrot.movement.Movement;
 import com.example.peachcobbler.roboparrot.parsing.Parser;
@@ -137,7 +138,19 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
             String text = hypothesis.getHypstr();
             bin.sendMessage(constructMessage(MAKE_TOAST, 0, text));
             int type = parser.guessType(text);
-            PhraseBook.respond(type, text);
+            if (type == PhraseBook.FUN_FACT) {
+                Message msg = new Message();
+                if (ParrotLocationManager.current == null) {
+                    msg.obj = ParrotLocationManager.defaultLocation;
+                }
+                else {
+                    msg.obj = ParrotLocationManager.current;
+                }
+                parser.getCommunicator().getPOIFinder().getHandler().sendMessage(msg);
+            }
+            else {
+                PhraseBook.respond(type, text);
+            }
             if (type == PhraseBook.NEXT) {
                 Message msg = new Message();
                 msg.what = DirectionManager.UPDATE;
@@ -160,7 +173,7 @@ public class ParrotSpeechRecognizer extends HandlerThread implements Recognition
                 parser.fetchCommand(text);
                 switchSearch(KWS_SEARCH);
             }
-            else if (type == PhraseBook.CONVERSATION) {
+            else if (type == PhraseBook.CONVERSATION || type == PhraseBook.FUN_FACT) {
                 switchSearch(KWS_SEARCH);
             }
         }
